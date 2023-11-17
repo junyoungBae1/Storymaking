@@ -98,6 +98,7 @@ module.exports.list = async (req, res) => {
       console.log(storys);
       return res.status(200).json({storys})
     }catch(err){
+      console.log(err)
       res.status(500).json({ message: 'List Server Error' });
     }
 }
