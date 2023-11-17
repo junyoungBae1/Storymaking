@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const StorySchema = new mongoose.Schema({
-  id:{
-    type : String,
-    required: true,
-    unique : true,
-  },
   title: {
     type: String,
     required: false,
@@ -15,6 +10,6 @@ const StorySchema = new mongoose.Schema({
     type: String,
     required: false,
   }
-},{ __v : false });
+},{ versionKey: false });
 
 module.exports = mongoose.model("Story",StorySchema);

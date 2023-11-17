@@ -1,7 +1,6 @@
 const OpenAI = require('openai');
 const Story = require('../models/storys');
 const axios = require('axios');
-var randomString = require("randomstring");
 require('dotenv').config()
 
 
@@ -72,7 +71,6 @@ module.exports.prompt = async (req, res) => {
       
       //모델 생성
       const newStory = new Story({
-        id: randomString.generate(12),
         title: name,
         content: sex,
       })
@@ -96,7 +94,7 @@ module.exports.list = async (req, res) => {
     try{
       const storys = await Story.find();
       console.log(storys);
-      return res.status(200).json({storys})
+      return res.status(200).json(storys)
     }catch(err){
       console.log(err)
       res.status(500).json({ message: 'List Server Error' });
