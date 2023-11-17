@@ -72,7 +72,7 @@ module.exports.prompt = async (req, res) => {
       //모델 생성
       const newStory = new Story({
         title: name,
-        content: sex,
+        content: "https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg",
       })
       try{
         await newStory.save();
@@ -99,4 +99,20 @@ module.exports.list = async (req, res) => {
       console.log(err)
       res.status(500).json({ message: 'List Server Error' });
     }
+}
+
+//이야기 특정가져오기
+module.exports.story = async (req, res) => {
+  try{
+    const id = req.body.id
+    const story = await Story.findById(id);
+    if (!story) { // 해당 ID의 스토리가 없다면 404 에러를 반환합니다.
+      return res.status(404).json({ message: 'Story not found' });
+    }
+    console.log(story);
+    return res.status(200).json(story)
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'story upload DB Server Error' });
+  }
 }
