@@ -1,5 +1,6 @@
 const Story = require(.../models/storys);
 
+//스토리 생성
 module.exports.story = async (req, res, next) => {
     const { name, sex, age, personality, name2,subject } = req.body;
 

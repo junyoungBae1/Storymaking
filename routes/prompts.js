@@ -3,7 +3,10 @@ const express = require("express");
 const router = express.Router();
 
 
-//값 받는 router
+//prompt받기
 router.post('/getPrompt',PromController.prompt);
+
+//이야기 list 조회
+router.get('/getList',PromController.list);
 
 module.exports = router;
