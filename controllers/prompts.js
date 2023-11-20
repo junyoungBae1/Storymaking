@@ -1,7 +1,12 @@
 const OpenAI = require('openai');
 const Story = require('../models/storys');
 const axios = require('axios');
+const fs = require('fs')
+const FormData = require('form-data')
 require('dotenv').config()
+
+//Leonardo 이미지 생성
+
 
 
 //chatGPT
@@ -24,8 +29,8 @@ async function getStory(prompt) {
 }
 //PAPAGO
 async function getTranslate(text) {
-  const client_id = process.env.Client_ID; 
-  const client_secret = process.env.Client_Secret;
+  const client_id = process.env.PAPAGO_Client_ID; 
+  const client_secret = process.env.PAPAGO_Client_Secret;
 
   const data = {
     text: text,
@@ -41,7 +46,6 @@ async function getTranslate(text) {
   };
   try {
       const response = await axios.post(url, data, { headers });
-      
       if (response.status === 200) {
         const send_data = response.data;
         const trans_data = send_data.message.result.translatedText;
@@ -55,6 +59,8 @@ async function getTranslate(text) {
       return null
     }
 }
+
+
 //스토리 생성
 module.exports.prompt = async (req, res) => {
     const {name, sex, age, personality, name2, subject} = req.body;
@@ -62,9 +68,7 @@ module.exports.prompt = async (req, res) => {
       console.log("response :",name, sex, age, personality, name2, subject);
       
       //PAPAGO K -> E
-
-      //words = getTranslate(name)
-
+      //words = await getTranslate(name)
       //gpt에게 prompt전송
 
       //content = await getStory("say hi");
@@ -77,7 +81,7 @@ module.exports.prompt = async (req, res) => {
       try{
         await newStory.save();
         console.log("Story Create success")
-      res.status(200).json({ message: "성공적으로 이야기가 완성되었습니다." })
+      res.status(200).json({ message: "성공적으로 이야기가 완성되었습니다.",words })
       }
       catch(err){
         console.log(err)
