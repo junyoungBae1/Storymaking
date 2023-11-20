@@ -33,6 +33,65 @@ app.listen(port, () => {
 
 module.exports = app;
 
+// 오류 발생
+// // sdk 초기화
+// admin.initializeApp({
+//   credential: admin.credential.cert('./fcm.json'),
+//   databaseURL: "https://myfbdb-aa8b7-default-rtdb.firebaseio.com"
+// });
+
+// // fcm 푸시 알림 보내는 함수
+// async function sendFCMPushNotification(androidFCMToken) {
+//   try {
+//     const message = {
+//       data: {
+//         title: '작업 완료',
+//         body: '서버 작업이 완료되었습니다!'
+//       },
+//       token: androidFCMToken,
+//     };
+
+//     const response = await admin.messaging().send(message);
+//     console.log('Push notification sent to', androidFCMToken, response);
+//   } catch (error) {
+//     console.error('Error sending message:', error);
+//   }
+// }
+
+// app.use(bodyParser.json());
+
+// const tokens = [];
+
+// app.post('/save-token', (req, res) => {
+//   const { token } = req.body;
+
+//   // 토큰을 배열에 저장
+//   toekn.push(token);
+
+//   console.log('Received token:', token);
+
+//   res.status(200).json({ message: 'Token received and saved successfully' });
+// });
+
+
+// app.post('/send-push-on-story-completion', (req, res)=>{
+//   const { token } = req.body;
+
+//   // 해당 토큰에 푸시알림 보내기
+//   sendFCMPushNotification(token);
+
+//   res.status(200).json({ message: 'Push notification sent on story completion' });
+// })
+
+
+// // 예제: FCM 토큰과 메시지를 이용하여 푸시 알림 보내기
+// const androidFCMToken = 'YOUR_ANDROID_FCM_TOKEN';
+// const message = 'Hello, this is a push notification from your Node.js server!';
+
+// sendFCMPushNotification(androidFCMToken, message);
+
+
+
 /*
 const express = require("express");
 const app = express();
@@ -46,10 +105,6 @@ const admin = require('firebase-admin');
 //  const serviceAccount
 //  firebase service account key
 
-// sdk 초기화
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 // 푸시 알림 메시지
 const message = {
@@ -57,10 +112,7 @@ const message = {
     title: '알림 제목',
     body: '알림 내용',
   },
-  data: {
-    action: 'open_activity',
-    data_key: 'some_data_value',
-  },
+ 
 
   // 보낼 대상
   token: '안드로이드 디바이스의 FCM 토큰',
