@@ -4,7 +4,6 @@ const port = 3000;
 const mongoose = require("mongoose");
 require("dotenv").config();
 var bodyParser = require('body-parser');
-
 var promRouter = require("./routes/prompts");
 
 mongoose
