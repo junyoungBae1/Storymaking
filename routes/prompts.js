@@ -10,5 +10,5 @@ router.post('/getPrompt',PromController.prompt);
 router.get('/getList',PromController.list);
 
 //이야기 특정 조회
-router.post('/getStory',PromController.story)
+router.post('/getStory',PromController.story);
 module.exports = router;
