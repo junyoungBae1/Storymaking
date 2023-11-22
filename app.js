@@ -32,30 +32,51 @@ app.listen(port, () => {
 
 module.exports = app;
 
-// 오류 발생
-// // sdk 초기화
-// admin.initializeApp({
-//   credential: admin.credential.cert('./fcm.json'),
-//   databaseURL: "https://myfbdb-aa8b7-default-rtdb.firebaseio.com"
-// });
 
-// // fcm 푸시 알림 보내는 함수
-// async function sendFCMPushNotification(androidFCMToken) {
-//   try {
-//     const message = {
-//       data: {
-//         title: '작업 완료',
-//         body: '서버 작업이 완료되었습니다!'
-//       },
-//       token: androidFCMToken,
-//     };
+// sdk 초기화
+admin.initializeApp({
+  credential: admin.credential.cert('./fcm.json'),
+  databaseURL: "https://myfbdb-aa8b7-default-rtdb.firebaseio.com"
+});
 
-//     const response = await admin.messaging().send(message);
-//     console.log('Push notification sent to', androidFCMToken, response);
-//   } catch (error) {
-//     console.error('Error sending message:', error);
-//   }
-// }
+
+async function sendFCMPushNotification(androidFCMToken) {
+  try {
+    const message = {
+      data: {
+        title: '동화 생성 완료',
+        body: '동화를 생성하였습니다!'
+      },
+      token: androidFCMToken,
+    };
+
+    const response = await admin.messaging().send(message);
+    console.log('Push notification sent to', androidFCMToken, response);
+  } catch (error) {
+    console.error('Error sending message:', error);
+  }
+}
+
+app.use(bodyParser.json());
+
+const tokens = [];
+
+app.post('/save-token', (req, res) => {
+  const { token } = req.body;
+
+  tokens.push(token);
+
+  console.log('Received token:', token);
+
+  // 서버 작업 수행
+
+  // 작업 완료 후 토큰
+
+  sendFCMPushNotification(token);
+  res.status(200).json({ message: 'Token received and saved successfully' });
+});
+
+
 
 // app.use(bodyParser.json());
 
