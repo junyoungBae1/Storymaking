@@ -7,6 +7,7 @@ const stream = require('stream');
 const Translate = require('../controllers/translate.js')
 const GPT = require('../controllers/gpt.js')
 const admin = require('firebase-admin'); 
+const path = require('path');
 
 //LEonardo api
 const api_key = process.env.Leonardo_API;
@@ -111,14 +112,14 @@ async function getImage() {
 }
 // sdk 초기화
 admin.initializeApp({
-  credential: admin.credential.cert('./fcm.json'),
+  credential: admin.credential.cert(path.join(__dirname, 'Storymaking', 'fcm.json')),
   databaseURL: "https://myfbdb-aa8b7-default-rtdb.firebaseio.com"
 });
 //알림보내기
 async function sendFCMPushNotification(androidFCMToken) {
   try {
     const message = {
-      data: {
+      notification: {
         title: '동화 생성 완료',
         body: '동화를 생성하였습니다!'
       },
