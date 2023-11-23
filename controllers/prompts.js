@@ -229,7 +229,6 @@ module.exports.prompt = async (req, res) => {
 
         await newStory.save();
         console.log("Story Create success")
-        await delay(20000);
         sendFCMPushNotification(tokens.pop());
         res.status(200).json({  message: "성공적으로 이야기가 완성되었습니다.",
                                 id : newStory._id,
