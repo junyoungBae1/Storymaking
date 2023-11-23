@@ -124,6 +124,7 @@ async function sendFCMPushNotification(androidFCMToken) {
       },
       token: androidFCMToken,
     };
+    console.log(androidFCMToken)
     const response = await admin.messaging().send(message);
     console.log('Push notification sent to', androidFCMToken, response);
   } catch (error) {
