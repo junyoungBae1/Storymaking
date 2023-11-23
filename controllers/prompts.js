@@ -6,6 +6,7 @@ const FormData = require('form-data');
 const stream = require('stream');
 const Translate = require('../controllers/translate.js')
 const GPT = require('../controllers/gpt.js')
+const admin = require('firebase-admin'); 
 
 //LEonardo api
 const api_key = process.env.Leonardo_API;
@@ -108,11 +109,36 @@ async function getImage() {
     console.error("Response headers:", err.response.headers);
   }
 }
-
+// sdk 초기화
+admin.initializeApp({
+  credential: admin.credential.cert('./fcm.json'),
+  databaseURL: "https://myfbdb-aa8b7-default-rtdb.firebaseio.com"
+});
+//알림보내기
+async function sendFCMPushNotification(androidFCMToken) {
+  try {
+    const message = {
+      data: {
+        title: '동화 생성 완료',
+        body: '동화를 생성하였습니다!'
+      },
+      token: androidFCMToken,
+    };
+    const response = await admin.messaging().send(message);
+    console.log('Push notification sent to', androidFCMToken, response);
+  } catch (error) {
+    console.error('Error sending message:', error);
+  }
+}
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+const tokens = [];
 //스토리 생성
 module.exports.prompt = async (req, res) => {
     let {name, sex, age, personality, name2, subject} = req.body;
     try {
+      
       console.log("response :",name, sex, age, personality, name2, subject);
       //이미지 생성
       //await generateAndFetchImage()
@@ -200,9 +226,10 @@ module.exports.prompt = async (req, res) => {
           ]
       });
 
-
         await newStory.save();
         console.log("Story Create success")
+        await delay(20000);
+        sendFCMPushNotification(tokens.pop());
         res.status(200).json({  message: "성공적으로 이야기가 완성되었습니다.",
                                 id : newStory._id,
                                 title : newStory.title,
@@ -246,3 +273,21 @@ module.exports.story = async (req, res) => {
     res.status(500).json({ message: 'story upload DB Server Error' });
   }
 }
+
+module.exports.fcm = async(req,res) =>{
+  try{
+    const { token } = req.body;
+    if (!token){
+      console.log('토큰 들어오지 않았습니다.',token)
+      res.status(400).json({message: '토큰이 들어오지 않았습니다.'})
+    }
+    tokens.push(token);
+    console.log("받은 토큰 :",token);
+    res.status(200).json({ message: 'Token received and saved successfully' });
+  }catch(err){
+    console.log(err)
+    res.status(500).json({message: 'token, sever error'})
+  }
+}
+
+
