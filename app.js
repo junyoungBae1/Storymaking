@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require('path');
 const port = 3000;
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -20,7 +21,8 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true }))
 // 프롬프트 사용
 app.use('/prompts',promRouter)
-
+//음악 사용
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //웹 화면 실행
 app.get('/',(req,res) => {
     res.send("hello")
@@ -31,8 +33,6 @@ app.listen(port, () => {
   });
 
 module.exports = app;
-
-
 
 // // sdk 초기화
 // admin.initializeApp({

@@ -8,6 +8,10 @@ const pageSchema = new mongoose.Schema({
   detail:{
     type: String,
     required: true
+  },
+  music:{
+    type: String,
+    requried: true
   }
 },{_id: false},{ versionKey: false })
 
